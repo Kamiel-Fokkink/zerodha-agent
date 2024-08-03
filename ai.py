@@ -3,6 +3,9 @@ import chromadb
 import os
 import streamlit as st
 
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 api_key = os.getenv("OPENAI_API_KEY")
