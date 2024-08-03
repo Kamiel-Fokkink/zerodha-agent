@@ -3,6 +3,7 @@ import chromadb
 import os
 import streamlit as st
 
+
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
@@ -22,9 +23,12 @@ def ask(messages):
     if len(messages) == 1:
         context = rag(messages[0]["content"])
         instruction = f"""You are a knowledgeable assistant specialized in providing accurate and concise answers based on the provided knowledge base. Use the following information to respond to user queries:
-Page 1: {context[0]}
-Page 2: {context[1]}
-Page 3: {context[2]}
+## Page 1: 
+{context[0]}
+## Page 2: 
+{context[1]}
+## Page 3: 
+{context[2]}
 Answer the questions clearly and directly based on the provided information. If the answer is not available in the knowledge base, indicate that the information is not available."""
         messages.insert(0, {"role": "system", "content": instruction})
         st.session_state.messages = messages
