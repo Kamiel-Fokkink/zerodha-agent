@@ -22,9 +22,10 @@ def get_page(url):
     soup = BeautifulSoup(response.content, 'html.parser')
     article_header = soup.find('div', class_='article-heading')
     article_content = soup.find('div', class_='content')
+    if article_header is None or article_content is None:
+        return ""
 
     content = article_header.get_text(strip=True) + '\n' + article_content.get_text(strip=True)
-    print(content)
     return content
 
 
@@ -46,8 +47,11 @@ if __name__ == '__main__':
         content_pages.update({t[1] for t in page_links})
 
     contents = {}
-    for page in list(content_pages):
+    for i, page in enumerate(list(content_pages)):
+        if i % 10 == 0:
+            print(f"{(i / len(content_pages)) * 100:.2f}% done")
         contents[page] = get_page(page)
+    unique_contents = {k: v for k, v in contents.items() if list(contents.values()).count(v) == 1}
 
     make_vector_db(contents)
 
